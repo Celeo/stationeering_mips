@@ -1,0 +1,51 @@
+alias gasSensor d0
+alias displayP d1
+alias displayT d2
+alias cooler d3
+alias heater d4
+
+alias pressure r0
+alias tempK r1
+alias tempC r2
+alias coolerOn r3
+alias heaterOn r4
+
+define kToC 272.15
+define tempCMin 30
+define tempCMax 40
+define ColorBlue 0
+define ColorGreen 2
+define ColorRed 4
+define StateOn 1
+define StateOff 0
+
+loop:
+# get the values
+l pressure gasSensor Pressure
+l tempK gasSensor Temperature
+sub tempC tempK kToC
+round tempC tempC
+
+# control the temperature
+sge coolerOn tempC tempCMax
+s cooler On coolerOn
+sle heaterOn tempC tempCMin
+s heater On heaterOn
+
+# update the displays
+s displayP Setting pressure
+s displayT Setting tempC
+s displayT Color ColorGreen
+beqal coolerOn StateOn displayTempCooler
+beqal heaterOn StateOn displayTempHeater
+
+yield
+j loop
+
+displayTempCooler:
+s displayT Color ColorBlue
+j ra
+
+displayTempHeater:
+s displayT Color ColorRed
+j ra

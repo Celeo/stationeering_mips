@@ -1,0 +1,29 @@
+alias generator d0
+alias sensor d1
+alias displayPower d2
+alias toggleSwitch d3
+
+alias pressure r0
+alias temperature r1
+alias powerOutput r2
+alias switchOn r3
+
+setup:
+s displayPower Mode 2
+
+loop:
+l powerOutput generator PowerGeneration
+s displayPower Setting powerOutput
+l switchOn toggleSwitch Setting
+beqal switchOn 0 turnGeneratorOff
+beqal switchOn 1 turnGeneratorOn
+yield
+j loop
+
+turnGeneratorOff:
+s generator On 0
+j ra
+
+turnGeneratorOn:
+s generator On 1
+j ra

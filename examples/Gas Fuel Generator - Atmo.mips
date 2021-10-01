@@ -1,0 +1,63 @@
+alias sensor d0
+alias ventInternal1 d1
+alias ventInternal2 d2
+alias ventExternal1 d3
+alias ventExternal2 d4
+alias displayAction d5
+
+alias temperature r0
+alias pressure r0
+
+define pressureMinimum 25
+define pressureMaximum 100
+define temperatureMinimum 278
+define temperatureMaximum 328
+
+setup:
+s ventInternal1 On 0
+s ventInternal2 On 0
+s ventExternal1 On 0
+s ventExternal2 On 0
+
+loop:
+l temperature sensor Temperature
+l pressure sensor Pressure
+bge pressure pressureMaximum outwardVentsOn
+ble pressure pressureMinimum inwardVentsOn
+bge temperature temperatureMaximum allVentsOn
+ble temperature temperatureMinimum allVentsOff
+j allVentsOff
+yield
+j loop
+
+allVentsOff:
+s ventInternal1 On 0
+s ventInternal2 On 0
+s ventExternal1 On 0
+s ventExternal2 On 0
+s displayAction Setting 0
+j loop
+
+allVentsOn:
+s ventInternal1 On 1
+s ventInternal2 On 1
+s ventExternal1 On 1
+s ventExternal2 On 1
+s displayAction Setting 1
+j loop
+
+outwardVentsOn:
+s ventInternal1 On 1
+s ventInternal2 On 1
+s ventExternal1 On 0
+s ventExternal2 On 0
+s displayAction Setting 2
+j loop
+
+inwardVentsOn:
+s ventInternal1 On 0
+s ventInternal2 On 0
+s ventExternal1 On 1
+s ventExternal2 On 1
+s displayAction Setting 3
+j loop

@@ -1,0 +1,49 @@
+alias sensor d0
+alias weather d1
+alias weatherDisplay d2
+
+alias angleV r0
+alias angleH r1
+alias weatherVal r2
+alias counter r3
+
+move counter 0
+
+loop:
+# -=== Solar panels ===-
+
+# load both V and H from sensor
+l angleV sensor Vertical
+l angleH sensor Horizontal
+
+# write V
+sub angleV 75 angleV
+div angleV angleV 1.5
+s db Setting angleV
+sb -539224550 Vertical angleV
+
+# write H
+s db Setting angleH
+sb -539224550 Horizontal angleH
+
+# increment counter
+add counter counter 1
+yield
+
+# only update weather every 5 ticks
+bne counter 5 loop
+
+# -=== Weather station ===-
+l weatherVal weather NextWeatherEventTime
+s weatherDisplay Setting weatherVal
+s weatherDisplay Color 2
+bnezal weatherVal setWeatherDisplayWarn
+move counter 0
+yield
+
+# loop back
+j loop
+
+setWeatherDisplayWarn:
+s weatherDisplay Color 3
+j ra

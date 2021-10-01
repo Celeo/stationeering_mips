@@ -1,0 +1,8 @@
+alias beacon d0
+
+loop:
+s beacon On 1
+sleep 2
+s beacon On 0
+sleep 10
+j loop

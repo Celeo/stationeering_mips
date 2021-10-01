@@ -1,0 +1,22 @@
+alias sensor d0
+
+alias angleV r0
+alias angleH r1
+
+loop:
+# load both V and H from sensor
+l angleV sensor Vertical
+l angleH sensor Horizontal
+
+# write V
+sub angleV 75 angleV
+div angleV angleV 1.5
+s db Setting angleV
+sb -539224550 Vertical angleV
+
+# write H
+s db Setting angleH
+sb -539224550 Horizontal angleH
+
+# loop back
+j loop
