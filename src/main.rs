@@ -1,9 +1,6 @@
-#![allow(unused, dead_code)]
-
+use clap::Parser;
 use once_cell::sync::Lazy;
-use serde::Deserialize;
-use std::{collections::HashMap, hash::Hash};
-use structopt::StructOpt;
+use std::collections::HashMap;
 
 static COMMAND_ARGS: Lazy<HashMap<&'static str, u8>> = Lazy::new(|| {
     let mut map = HashMap::new();
@@ -21,26 +18,26 @@ static COMMAND_ARGS: Lazy<HashMap<&'static str, u8>> = Lazy::new(|| {
     map
 });
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug)]
 enum Line {
     Empty,
     Label(String),
     Statement(String),
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug)]
 struct Device {
     index: u8,
     values: HashMap<u8, f64>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug)]
 struct Register {
     index: u8,
     value: f64,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug)]
 struct Machine {
     lines: Vec<Line>,
     current_line: u16,
@@ -48,7 +45,7 @@ struct Machine {
     devices: [Device; 7],
 }
 
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Parser)]
 struct Options {
     //
 }
